@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ConversionBuddy</string>
+    <string name="language">Language</string>
+    <string name="currency">Currency</string>
 </resources>

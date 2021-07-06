@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/languageFragment"
+        android:title="@string/language"
+        android:icon="@drawable/ic_menu_language"
+        />
+
+    <item
+        android:id="@+id/currencyFragment"
+        android:title="@string/currency"
+        android:icon="@drawable/ic_menu_currency"
+        />
+
+</menu>
