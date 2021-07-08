@@ -1,12 +1,19 @@
 package com.sreshtha.conversionbuddy.models
 
-data class CurrencyModel(
+
+data class CurrencyResponse(
     val base: String,
     val date: String,
+    val motd: Motd,
     val rates: Rates,
-    val success: Boolean,
-    val timestamp: Int
+    val success: Boolean
 )
+
+data class Motd(
+    val msg: String,
+    val url: String
+)
+
 
 data class Rates(
     val AED: Double,
@@ -34,13 +41,13 @@ data class Rates(
     val BTN: Double,
     val BWP: Double,
     val BYN: Double,
-    val BYR: Double,
     val BZD: Double,
     val CAD: Double,
     val CDF: Double,
     val CHF: Double,
     val CLF: Double,
     val CLP: Double,
+    val CNH: Double,
     val CNY: Double,
     val COP: Double,
     val CRC: Double,
@@ -97,8 +104,6 @@ data class Rates(
     val LKR: Double,
     val LRD: Double,
     val LSL: Double,
-    val LTL: Double,
-    val LVL: Double,
     val LYD: Double,
     val MAD: Double,
     val MDL: Double,
@@ -108,6 +113,7 @@ data class Rates(
     val MNT: Double,
     val MOP: Double,
     val MRO: Double,
+    val MRU: Double,
     val MUR: Double,
     val MVR: Double,
     val MWK: Double,
@@ -143,7 +149,9 @@ data class Rates(
     val SLL: Double,
     val SOS: Double,
     val SRD: Double,
+    val SSP: Double,
     val STD: Double,
+    val STN: Double,
     val SVC: Double,
     val SYP: Double,
     val SZL: Double,
@@ -161,7 +169,7 @@ data class Rates(
     val USD: Double,
     val UYU: Double,
     val UZS: Double,
-    val VEF: Double,
+    val VES: Double,
     val VND: Double,
     val VUV: Double,
     val WST: Double,
@@ -171,10 +179,11 @@ data class Rates(
     val XCD: Double,
     val XDR: Double,
     val XOF: Double,
+    val XPD: Double,
     val XPF: Double,
+    val XPT: Double,
     val YER: Double,
     val ZAR: Double,
-    val ZMK: Double,
     val ZMW: Double,
     val ZWL: Double
 )

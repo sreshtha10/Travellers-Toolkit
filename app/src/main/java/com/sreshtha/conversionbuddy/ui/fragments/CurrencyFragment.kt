@@ -1,25 +1,22 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.sreshtha.conversionbuddy.api.currency.RetrofitInstance
+import androidx.lifecycle.ViewModelProvider
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
-import com.sreshtha.conversionbuddy.models.CurrencyModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
+import com.sreshtha.conversionbuddy.models.CurrencyResponse
+import com.sreshtha.conversionbuddy.models.CurrencyViewModel
+import com.sreshtha.conversionbuddy.models.CurrencyViewModelFactory
+import com.sreshtha.conversionbuddy.repository.Repository
 
 class CurrencyFragment : Fragment() {
     private var binding:FragmentCurrencyBinding? = null
-    private var currencyModel:CurrencyModel? = null
+    private var currencyModel: CurrencyResponse? = null
+    private lateinit var viewModel: CurrencyViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,55 +24,37 @@ class CurrencyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCurrencyBinding.inflate(inflater,container,false)
+        val repository = Repository()
+        val viewModelFactory = CurrencyViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(CurrencyViewModel::class.java)
+
+        viewModel.currencyResponse.observe(viewLifecycleOwner,){
+            if(it.isSuccessful && it.body() != null){
+                currencyModel = it.body()!!
+                Log.d("Response","Success")
+            }
+            else{
+                Log.e("RetrofitError",it.message())
+            }
+
+        }
+
         return binding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        fetchRatesFromAPI()
-        Toast.makeText(
-            activity,
-            currencyModel?.rates.toString(),
-            Toast.LENGTH_LONG
-        ).show()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+        currencyModel = null
     }
 
 
-    private fun fetchRatesFromAPI(){
-        lifecycleScope.launch(Dispatchers.IO){
-            val response = try{
-                RetrofitInstance.currency_api.getExchangeRate()
-            }
-            catch (e:IOException) {
-                Log.e("ErrorInRetrofitAPI", "You may not have internet connection")
-                return@launch
-            }
-            catch (e : HttpException) {
-                Log.e("ErrorInRetrofitAPI", "Unexpected Response")
-                return@launch
-            }
 
-            Toast.makeText(
-                activity,
-                response.toString(),
-                Toast.LENGTH_LONG
-            ).show()
 
-            if(response.isSuccessful && response.body() != null){
-                currencyModel = response.body()!!
-            }
-        }
 
-    }
+
 
 
 }
