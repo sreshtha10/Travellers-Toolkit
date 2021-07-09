@@ -1,7 +1,6 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,20 +27,10 @@ class CurrencyFragment : Fragment() {
         val viewModelFactory = CurrencyViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(CurrencyViewModel::class.java)
 
-        viewModel.currencyResponse.observe(viewLifecycleOwner,){
-            if(it.isSuccessful && it.body() != null){
-                currencyModel = it.body()!!
-                Log.d("Response","Success")
-            }
-            else{
-                Log.e("RetrofitError",it.message())
-            }
-
-        }
+        viewModel.getRates()
 
         return binding?.root
     }
-
 
 
     override fun onDestroy() {
@@ -49,12 +38,5 @@ class CurrencyFragment : Fragment() {
         binding = null
         currencyModel = null
     }
-
-
-
-
-
-
-
 
 }
