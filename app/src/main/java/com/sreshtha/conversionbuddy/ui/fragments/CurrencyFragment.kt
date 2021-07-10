@@ -1,6 +1,8 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,9 @@ class CurrencyFragment : Fragment() {
     private var binding:FragmentCurrencyBinding? = null
     private var rates: HashMap<String,Double>? = null
     private lateinit var viewModel: CurrencyViewModel
+
+    private var ipCountry = "AED"
+    private var opCountry = "AED"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +78,7 @@ class CurrencyFragment : Fragment() {
                 id: Long
             ) {
                 val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                ipCountry = currencyCode.uppercase()
                 try{
                     if(currencyCode != "try"){
                         val imageRes = resources.getIdentifier("drawable/"+currencyCode,"drawable",activity?.packageName)
@@ -105,6 +111,7 @@ class CurrencyFragment : Fragment() {
                 id: Long
             ) {
                 val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                opCountry = currencyCode.uppercase()
                 try {
                     if (currencyCode != "try") {
                         val imageRes = resources.getIdentifier(
@@ -134,6 +141,30 @@ class CurrencyFragment : Fragment() {
             }
 
         }
+
+
+
+        binding?.etCurrencyIp?.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(rates == null){
+                    return
+                }
+                else{
+                    val ipCurr = rates!![ipCountry]
+                    val opCurr = rates!![opCountry]
+                    val amount = (s.toString().toFloat()) * (ipCurr!!)/(opCurr!!)
+                    binding!!.tvCurrencyOp.text = amount.toString()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
     }
 
 
