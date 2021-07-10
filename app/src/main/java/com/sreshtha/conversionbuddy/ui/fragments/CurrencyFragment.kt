@@ -1,9 +1,12 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
@@ -11,10 +14,15 @@ import com.sreshtha.conversionbuddy.models.CurrencyResponse
 import com.sreshtha.conversionbuddy.models.CurrencyViewModel
 import com.sreshtha.conversionbuddy.models.CurrencyViewModelFactory
 import com.sreshtha.conversionbuddy.repository.Repository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
+
 
 class CurrencyFragment : Fragment() {
     private var binding:FragmentCurrencyBinding? = null
-    private var currencyModel: CurrencyResponse? = null
+    private var rates: HashMap<String,Double>? = null
     private lateinit var viewModel: CurrencyViewModel
 
     override fun onCreateView(
@@ -27,16 +35,112 @@ class CurrencyFragment : Fragment() {
         val viewModelFactory = CurrencyViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(CurrencyViewModel::class.java)
 
-        viewModel.getRates()
+        viewModel.getRates().enqueue(object :Callback<CurrencyResponse>{
+            override fun onResponse(
+                call: Call<CurrencyResponse>,
+                response: Response<CurrencyResponse>
+            ) {
+                if(response.isSuccessful && response.body() != null){
+                    rates = response.body()?.rates
+                    Log.d("Rates","Success")
+                }
+                else{
+                    Toast.makeText(
+                        activity,
+                        response.message(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
 
+            override fun onFailure(call: Call<CurrencyResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+        })
         return binding?.root
     }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding?.spCurrIp?.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                try{
+                    if(currencyCode != "try"){
+                        val imageRes = resources.getIdentifier("drawable/"+currencyCode,"drawable",activity?.packageName)
+                        binding?.imageView?.setImageResource(imageRes)
+                    }
+                    else{
+                        // special case
+                        val imageRes = resources.getIdentifier("drawable/turkey","drawable",activity?.packageName)
+                        binding?.imageView?.setImageResource(imageRes)
+                    }
+                }
+                catch(e:Exception){
+                    binding?.imageView?.setImageResource(0)
+                }
+
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
+
+        binding?.spCurrOp?.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                try {
+                    if (currencyCode != "try") {
+                        val imageRes = resources.getIdentifier(
+                            "drawable/" + currencyCode,
+                            "drawable",
+                            activity?.packageName
+                        )
+                        binding?.imageView2?.setImageResource(imageRes)
+                    } else {
+                        // special case
+                        val imageRes = resources.getIdentifier(
+                            "drawable/turkey",
+                            "drawable",
+                            activity?.packageName
+                        )
+                        binding?.imageView2?.setImageResource(imageRes)
+                    }
+                } catch (e: Exception) {
+                    binding?.imageView2?.setImageResource(0)
+                }
+
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+    }
+
 
 
     override fun onDestroy() {
         super.onDestroy()
         binding = null
-        currencyModel = null
     }
 
 }
