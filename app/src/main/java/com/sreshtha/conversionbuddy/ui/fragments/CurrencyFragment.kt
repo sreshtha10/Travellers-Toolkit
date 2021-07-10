@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
 import com.sreshtha.conversionbuddy.models.CurrencyResponse
 import com.sreshtha.conversionbuddy.models.CurrencyViewModel
@@ -165,6 +168,8 @@ class CurrencyFragment : Fragment() {
             }
         })
 
+        setUpCustomSpinner()
+
     }
 
 
@@ -172,6 +177,15 @@ class CurrencyFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+    }
+
+
+    private fun setUpCustomSpinner(){
+        val arr = resources.getStringArray(R.array.codes)
+        val adapter = activity?.let { ArrayAdapter<String>(it,R.layout.spinner_custom,arr) }
+        adapter?.setDropDownViewResource(R.layout.spinner_custom)
+        binding?.spCurrIp?.adapter = adapter
+        binding?.spCurrOp?.adapter = adapter
     }
 
 }

@@ -5,6 +5,7 @@
     <string name="currency_fragment">Currency Fragment</string>
     <string name="language_fragment">Language Fragment</string>
     <string name="currency_converter">Currency Converter</string>
+    <string name="_1">1</string>
     <array name="codes">
         <item>AED</item>
         <item>AFN</item>
