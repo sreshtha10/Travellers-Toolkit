@@ -9,7 +9,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/noto"
         android:text="@string/currency_converter"
         android:textSize="25sp"
@@ -22,7 +22,7 @@
     <EditText
         android:id="@+id/et_currency_ip"
         android:layout_width="wrap_content"
-        android:text="@string/_1"
+        android:text="0"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:inputType="number"
@@ -35,7 +35,7 @@
     <TextView
         android:id="@+id/tv_currency_op"
         android:layout_width="wrap_content"
-        android:text="@string/_1"
+        android:text="0"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:minWidth="150dp"
@@ -96,5 +96,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_currency_ip" />
+
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

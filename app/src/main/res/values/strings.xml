@@ -6,6 +6,7 @@
     <string name="language_fragment">Language Fragment</string>
     <string name="currency_converter">Currency Converter</string>
     <string name="_1">1</string>
+    <string name="loading">Loading</string>
     <array name="codes">
         <item>AED</item>
         <item>AFN</item>
@@ -30,13 +31,9 @@
         <item>BSD</item>
         <item>BTC</item>
         <item>BTN</item>
-
-
         <item>BWP</item>
         <item>BYN</item>
         <item>BZD</item>
-
-
         <item>CAD</item>
         <item>CDF</item>
         <item>CHF</item>
@@ -44,28 +41,22 @@
         <item>CLP</item>
         <item>CNH</item>
         <item>CNY</item>
-
-
         <item>COP</item>
         <item>CRC</item>
         <item>CUC</item>
         <item>CUP</item>
         <item>CVE</item>
         <item>CZK</item>
-
         <item>DJF</item>
         <item>DKK</item>
         <item>DOP</item>
         <item>DZD</item>
-
         <item>EGP</item>
         <item>ERN</item>
         <item>ETB</item>
         <item>EUR</item>
-
         <item>FJD</item>
         <item>FKP</item>
-
         <item>GBP</item>
         <item>GEL</item>
         <item>GGP</item>
@@ -75,13 +66,11 @@
         <item>GNF</item>
         <item>GTQ</item>
         <item>GYD</item>
-
         <item>HKD</item>
         <item>HNL</item>
         <item>HRK</item>
         <item>HTG</item>
         <item>HUF</item>
-
         <item>IDR</item>
         <item>ILS</item>
         <item>IMP</item>
@@ -89,12 +78,10 @@
         <item>IQD</item>
         <item>IRR</item>
         <item>ISK</item>
-
         <item>JEP</item>
         <item>JMD</item>
         <item>JOD</item>
         <item>JPY</item>
-
         <item>KES</item>
         <item>KGS</item>
         <item>KHR</item>
@@ -104,14 +91,12 @@
         <item>KWD</item>
         <item>KYD</item>
         <item>KZT</item>
-
         <item>LAK</item>
         <item>LBP</item>
         <item>LKR</item>
         <item>LRD</item>
         <item>LSL</item>
         <item>LYD</item>
-
         <item>MAD</item>
         <item>MDL</item>
         <item>MGA</item>
@@ -127,16 +112,13 @@
         <item>MXN</item>
         <item>MYR</item>
         <item>MZN</item>
-
         <item>NAD</item>
         <item>NGN</item>
         <item>NIO</item>
         <item>NOK</item>
         <item>NPR</item>
         <item>NZD</item>
-
         <item>OMR</item>
-
         <item>PAB</item>
         <item>PEN</item>
         <item>PGK</item>
@@ -144,14 +126,11 @@
         <item>PKR</item>
         <item>PLN</item>
         <item>PYG</item>
-
         <item>QAR</item>
-
         <item>RON</item>
         <item>RSD</item>
         <item>RUB</item>
         <item>RWF</item>
-
         <item>SAR</item>
         <item>SBD</item>
         <item>SCR</item>
@@ -168,7 +147,6 @@
         <item>SVC</item>
         <item>SYP</item>
         <item>SZL</item>
-
         <item>THB</item>
         <item>TJS</item>
         <item>TMT</item>
@@ -178,18 +156,15 @@
         <item>TTD</item>
         <item>TWD</item>
         <item>TZS</item>
-
         <item>UAH</item>
         <item>UGX</item>
         <item>USD</item>
         <item>UYU</item>
         <item>UZS</item>
-
         <item>VES</item>
         <item>VND</item>
         <item>VUV</item>
         <item>WST</item>
-
         <item>XAF</item>
         <item>XAG</item> //silver
         <item>XAU</item> // gold
@@ -199,10 +174,7 @@
         <item>XPD</item>
         <item>XPF</item>
         <item>XPT</item>
-
         <item>YER</item>
-
-
         <item>ZAR</item>
         <item>ZMW</item>
         <item>ZWL</item>
