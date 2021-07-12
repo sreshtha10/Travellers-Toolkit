@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.mlkit.nl.translate.TranslateLanguage
-import com.google.mlkit.nl.translate.TranslatorOptions
 import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
 
 class LanguageFragment : Fragment() {
