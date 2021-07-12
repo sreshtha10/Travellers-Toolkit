@@ -7,6 +7,8 @@
     <string name="currency_converter">Currency Converter</string>
     <string name="_1">1</string>
     <string name="loading">Loading</string>
+    <string name="language_translator">Language Translator</string>
+    <string name="translate">Translate</string>
     <array name="codes">
         <item>AED</item>
         <item>AFN</item>
@@ -166,8 +168,10 @@
         <item>VUV</item>
         <item>WST</item>
         <item>XAF</item>
-        <item>XAG</item> //silver
-        <item>XAU</item> // gold
+        <item>XAG</item>
+        //silver
+        <item>XAU</item>
+        // gold
         <item>XCD</item>
         <item>XDR</item>
         <item>XOF</item>
@@ -178,5 +182,68 @@
         <item>ZAR</item>
         <item>ZMW</item>
         <item>ZWL</item>
+    </array>
+
+
+    <array name="lang">
+        <item>Afrikaans</item>
+        <item>Arabic</item>
+        <item>Belarusian</item>
+        <item>Bulgarian</item>
+        <item>Bengali</item>
+        <item>Catalan</item>
+        <item>Czech</item>
+        <item>Welsh</item>
+        <item>Danish</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>English</item>
+        <item>Esperanto</item>
+        <item>Spanish</item>
+        <item>Estonian</item>
+        <item>Persian</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>Irish</item>
+        <item>Galician</item>
+        <item>Gujarati</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Croatian</item>
+        <item>Haitian</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Icelandic</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Georgian</item>
+        <item>Kannada</item>
+        <item>Korean</item>
+        <item>Lithuanian</item>
+        <item>Latvian</item>
+        <item>Macedonian</item>
+        <item>Marathi</item>
+        <item>Malay</item>
+        <item>Maltese</item>
+        <item>Dutch</item>
+        <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Slovenian</item>
+        <item>Albanian</item>
+        <item>Swedish</item>
+        <item>Swahili</item>
+        <item>Tamil</item>
+        <item>Telugu</item>
+        <item>Thai</item>
+        <item>Tagalog</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+        <item>Chinese</item>
     </array>
 </resources>

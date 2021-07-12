@@ -16,6 +16,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -61,10 +62,14 @@ dependencies {
     //HttpLoggingInterceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 
-    //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
+    //Translation ML kit
+    implementation 'com.google.mlkit:translate:16.1.2'
+
+    // Language Detection
+    implementation 'com.google.mlkit:language-id:16.1.1'
+
+    //multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
 
 }
