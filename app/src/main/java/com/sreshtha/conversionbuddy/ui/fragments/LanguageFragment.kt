@@ -1,15 +1,23 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
+import com.sreshtha.conversionbuddy.utils.Constants
 
 class LanguageFragment : Fragment() {
 
     private var binding:FragmentLanguageBinding? = null
+
+    var detectedLang:String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +32,22 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding?.etInputLang?.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+               detectLang(s.toString())
+               if(detectedLang!=null){
+                   binding?.tvDetectedLang?.text = Constants.map[detectedLang]
+               }
+            }
+        })
 
     }
 
@@ -32,6 +56,30 @@ class LanguageFragment : Fragment() {
         super.onDestroy()
         binding = null
     }
+
+
+    private fun detectLang(s:String){
+        val languageIdentifier = LanguageIdentification.getClient()
+
+        languageIdentifier.identifyLanguage(s)
+            .addOnSuccessListener {
+                if(it == "und"){
+                    Log.i("TAG","Can't identify language")
+                }
+                else{
+                    detectedLang = it
+
+                    Log.i("TAG","Language:$it")
+                }
+            }
+            .addOnFailureListener {
+                Log.e("LangError",it.message.toString())
+            }
+    }
+
+
+
+
 
 
 }
