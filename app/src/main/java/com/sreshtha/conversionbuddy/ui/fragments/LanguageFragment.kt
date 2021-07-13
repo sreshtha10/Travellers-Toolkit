@@ -7,8 +7,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.google.mlkit.nl.languageid.LanguageIdentification
+import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
 import com.sreshtha.conversionbuddy.utils.Constants
 
@@ -32,6 +35,8 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpSpinnerAdapter()
+
         binding?.etInputLang?.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -48,6 +53,28 @@ class LanguageFragment : Fragment() {
                }
             }
         })
+
+
+        binding?.spinnerLang?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val lang = parent?.getItemAtPosition(position)
+
+                // check if lang model is downloaded or not.
+
+
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
 
     }
 
@@ -79,7 +106,11 @@ class LanguageFragment : Fragment() {
 
 
 
-
+    private fun setUpSpinnerAdapter(){
+        val arr = resources.getStringArray(R.array.lang)
+        val adapter = activity?.let { ArrayAdapter(it,R.layout.spinner_custom,arr) }
+        binding?.spinnerLang?.adapter = adapter
+    }
 
 
 }
