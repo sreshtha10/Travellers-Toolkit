@@ -13,15 +13,11 @@ class Constants {
 
             map.put("ar", "Arabic")
 
-            map.put("ar-Latn", "Arabic")
-
             map.put("az", "Azerbaijani")
 
             map.put("be", "Belarusian")
 
             map.put("bg", "Bulgarian")
-
-            map.put("bg-Latn", "	Bulgarian")
 
             map.put("bn", "Bengali")
 
@@ -42,8 +38,6 @@ class Constants {
             map.put("de", "German")
 
             map.put("el", "Greek")
-
-            map.put("el-Latn", "Greek")
 
             map.put("en", "English")
 
@@ -81,8 +75,6 @@ class Constants {
 
             map.put("hi", "Hindi")
 
-            map.put("hi-Latn", "Hindi")
-
             map.put("hmn", "Hmong")
 
             map.put("hr", "Croatian")
@@ -103,7 +95,6 @@ class Constants {
 
             map.put("ja", "Japanese")
 
-            map.put("ja-Latn", "Japanese")
 
             map.put("jv", "Javanese")
 
@@ -169,8 +160,6 @@ class Constants {
 
             map.put("ru", "Russian")
 
-            map.put("ru-Latn", "Russian")
-
             map.put("sd", "Sindhi")
 
             map.put("si", "Sinhala")
@@ -220,8 +209,6 @@ class Constants {
             map.put("yo", "Yoruba")
 
             map.put("zh", "Chinese")
-
-            map.put("zh-Latn", "Chinese")
 
             map.put("zu", "Zulu")
 

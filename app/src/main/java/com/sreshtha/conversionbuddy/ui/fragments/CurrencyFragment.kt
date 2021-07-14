@@ -34,6 +34,7 @@ class CurrencyFragment : Fragment() {
     private var ipCountry = "AED"
     private var opCountry = "AED"
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,20 +64,17 @@ class CurrencyFragment : Fragment() {
 
                 } else {
                     loadingDialog?.dismissDialog()
-                    Toast.makeText(
-                        activity,
-                        response.message(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d("Rates", "Failure")
                 }
             }
 
             override fun onFailure(call: Call<CurrencyResponse>, t: Throwable) {
                 t.printStackTrace()
                 loadingDialog?.dismissDialog()
+                Log.d("Rates", "Failure")
             }
-
         })
+
         //end of network call
         return binding?.root
     }
@@ -84,6 +82,8 @@ class CurrencyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
 
         // setting up spinner's  custom adapter

@@ -189,7 +189,7 @@ class LanguageFragment : Fragment() {
         catch (e:Exception){
             Toast.makeText(
                 activity,
-                "Cannot Translate !",
+                e.message.toString(),
                 Toast.LENGTH_SHORT
             ).show()
         }
