@@ -8,7 +8,7 @@ import retrofit2.http.GET
 
 interface CurrencyAPI {
 
-    @GET("latest/")
+    @GET("/latest")
     fun getExchangeRate(): Call<CurrencyResponse>
 
 }

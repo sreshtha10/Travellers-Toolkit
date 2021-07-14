@@ -9,6 +9,7 @@
     <string name="loading">Loading</string>
     <string name="language_translator">Language Translator</string>
     <string name="translate">Translate</string>
+    <string name="downloading_language_model_30mb">Downloading Language Model (30MB)</string>
     <array name="codes">
         <item>AED</item>
         <item>AFN</item>

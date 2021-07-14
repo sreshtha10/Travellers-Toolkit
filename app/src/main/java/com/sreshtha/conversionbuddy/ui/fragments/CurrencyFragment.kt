@@ -203,6 +203,7 @@ class CurrencyFragment : Fragment() {
                         binding!!.tvCurrencyOp.text = amount.toString()
                     }
                     catch (e:Exception){
+                        Log.e("ConversionError",e.message.toString())
                         clearFields()
                     }
                 }
