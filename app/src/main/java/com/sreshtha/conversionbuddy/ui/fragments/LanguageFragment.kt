@@ -3,6 +3,7 @@ package com.sreshtha.conversionbuddy.ui.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,7 @@ import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class LanguageFragment : Fragment() {
 
@@ -47,6 +48,8 @@ class LanguageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUpSpinnerAdapter()
+
+        binding?.tvOutputLang?.movementMethod =  ScrollingMovementMethod()
 
         binding?.etInputLang?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

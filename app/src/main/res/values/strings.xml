@@ -10,6 +10,7 @@
     <string name="language_translator">Language Translator</string>
     <string name="translate">Translate</string>
     <string name="downloading_language_model_30mb">Downloading Language Model (30MB)</string>
+    <string name="cancel">Cancel</string>
     <array name="codes">
         <item>AED</item>
         <item>AFN</item>
