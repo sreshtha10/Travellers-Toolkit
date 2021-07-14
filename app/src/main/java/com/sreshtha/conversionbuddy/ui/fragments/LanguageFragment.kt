@@ -23,6 +23,7 @@ import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LanguageFragment : Fragment() {
 
@@ -140,41 +141,55 @@ class LanguageFragment : Fragment() {
 
 
     fun translate(keyIp: String, keyOp: String, inputText: String) {
-        val options = TranslatorOptions.Builder()
-            .setSourceLanguage(TranslateLanguage.fromLanguageTag(keyIp))
-            .setTargetLanguage(TranslateLanguage.fromLanguageTag(keyOp))
-            .build()
+        try{
+            val options = TranslatorOptions.Builder()
+                .setSourceLanguage(TranslateLanguage.fromLanguageTag(keyIp))
+                .setTargetLanguage(TranslateLanguage.fromLanguageTag(keyOp))
+                .build()
 
-        val translator = Translation.getClient(options)
+            val translator = Translation.getClient(options)
 
-        val conditions = DownloadConditions.Builder()
-            .build()
+            val conditions = DownloadConditions.Builder()
+                .build()
 
-        // loading custom dialog till the network call is completed.
-        val downloadingDialog = activity?.let { CustomDownloadingDialog(it) }
-        downloadingDialog?.startLoadingDialog()
+            // loading custom dialog till the network call is completed.
+            val downloadingDialog = activity?.let { CustomDownloadingDialog(it) }
+            downloadingDialog?.startLoadingDialog()
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            translator.downloadModelIfNeeded(conditions)
-                .addOnSuccessListener {
-                    Log.d("LangDownloadModel", "success")
-                    downloadingDialog?.dismissDialog()
-                    translator.translate(inputText)
-                        .addOnSuccessListener {
-                            Log.d("LangTranslateModel", "success")
-                            binding!!.tvOutputLang.text = it
+            lifecycleScope.launch(Dispatchers.IO) {
+                translator.downloadModelIfNeeded(conditions)
+                    .addOnSuccessListener {
+                        Log.d("LangDownloadModel", "success")
+                        downloadingDialog?.dismissDialog()
+                        try{
+                            translator.translate(inputText)
+                                .addOnSuccessListener {
+                                    Log.d("LangTranslateModel", "success")
+                                    binding!!.tvOutputLang.text = it
+                                }
+                                .addOnFailureListener {
+                                    Log.d("LangTranslateModel", it.message.toString())
+                                    downloadingDialog?.dismissDialog()
+                                }
                         }
-                        .addOnFailureListener {
-                            Log.d("LangTranslateModel", it.message.toString())
-                            downloadingDialog?.dismissDialog()
+                        catch(e:Exception){
+                            Log.e("TranslateError",e.message.toString())
                         }
-                }
-                .addOnFailureListener {
-                    Log.d("LangDownloadModel", it.message.toString())
-                    downloadingDialog?.dismissDialog()
-                }
+
+                    }
+                    .addOnFailureListener {
+                        Log.d("LangDownloadModel", it.message.toString())
+                        downloadingDialog?.dismissDialog()
+                    }
+            }
         }
-
+        catch (e:Exception){
+            Toast.makeText(
+                activity,
+                "Cannot Translate !",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
     }
 
