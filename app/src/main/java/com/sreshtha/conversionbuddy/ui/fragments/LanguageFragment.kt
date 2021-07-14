@@ -85,7 +85,7 @@ class LanguageFragment : Fragment() {
 
         binding?.button?.setOnClickListener {
             var keyLangOutput: String? = null
-            var inputText = binding!!.etInputLang.text.toString()
+            val inputText = binding!!.etInputLang.text.toString()
             for ((key, value) in Constants.map.entries) {
                 if (value == langOutput) {
                     keyLangOutput = key
@@ -154,29 +154,26 @@ class LanguageFragment : Fragment() {
         val downloadingDialog = activity?.let { CustomDownloadingDialog(it) }
         downloadingDialog?.startLoadingDialog()
 
-
-        lifecycleScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             translator.downloadModelIfNeeded(conditions)
                 .addOnSuccessListener {
-                    Log.d("LangDownloadModel","success")
+                    Log.d("LangDownloadModel", "success")
                     downloadingDialog?.dismissDialog()
                     translator.translate(inputText)
                         .addOnSuccessListener {
-                            Log.d("LangTranslateModel","success")
+                            Log.d("LangTranslateModel", "success")
                             binding!!.tvOutputLang.text = it
                         }
                         .addOnFailureListener {
-                            Log.d("LangTranslateModel",it.message.toString())
+                            Log.d("LangTranslateModel", it.message.toString())
                             downloadingDialog?.dismissDialog()
                         }
                 }
                 .addOnFailureListener {
-                    Log.d("LangDownloadModel",it.message.toString())
+                    Log.d("LangDownloadModel", it.message.toString())
                     downloadingDialog?.dismissDialog()
                 }
         }
-
-
 
 
     }

@@ -199,7 +199,7 @@ class CurrencyFragment : Fragment() {
                     try{
                         val ipCurr = rates!![ipCountry]
                         val opCurr = rates!![opCountry]
-                        val amount = (s.toString().toFloat()) * (ipCurr!!) / (opCurr!!)
+                        val amount = (s.toString().toFloat()) * (opCurr!!) / (ipCurr!!)
                         binding!!.tvCurrencyOp.text = amount.toString()
                     }
                     catch (e:Exception){
