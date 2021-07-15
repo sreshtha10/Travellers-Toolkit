@@ -13,7 +13,7 @@ ___
 * **Offline** translation available, once a language model is downloaded.
 * User can switch between **Dark** and **Light** theme.
 
-__
+___
 
 
 ## Permissions Required
