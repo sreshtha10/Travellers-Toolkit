@@ -1,8 +1,11 @@
  package com.sreshtha.conversionbuddy.ui
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.ui.setupWithNavController
@@ -25,10 +28,31 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = CurrencyViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(CurrencyViewModel::class.java)
 
-
         val navHost = supportFragmentManager.findFragmentById(R.id.fragment_container)  as NavHost
         binding.bottomNavigationView.setupWithNavController(navHost.navController)
 
 
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.theme_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_change_theme ->{
+                when(this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)){
+                    Configuration.UI_MODE_NIGHT_YES ->{
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                    Configuration.UI_MODE_NIGHT_NO ->{
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    }
+                }
+            }
+        }
+        return true
     }
 }

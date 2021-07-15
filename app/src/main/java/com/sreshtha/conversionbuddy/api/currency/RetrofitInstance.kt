@@ -1,6 +1,6 @@
 package com.sreshtha.conversionbuddy.api.currency
 
-import com.google.gson.GsonBuilder
+
 import com.sreshtha.conversionbuddy.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit
 object RetrofitInstance {
 
 
-    private val client by lazy{
+    private val client by lazy {
         OkHttpClient.Builder()
-            .readTimeout(5000,TimeUnit.SECONDS)
+            .readTimeout(5000, TimeUnit.SECONDS)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 this.level = HttpLoggingInterceptor.Level.BODY
             })
-            .connectTimeout(100,TimeUnit.SECONDS)
+            .connectTimeout(100, TimeUnit.SECONDS)
             .build()
     }
 
@@ -29,8 +29,8 @@ object RetrofitInstance {
             .client(client)
             .build()
     }
-    
-    val currency_api: CurrencyAPI by lazy { 
+
+    val currency_api: CurrencyAPI by lazy {
         retrofit.create(CurrencyAPI::class.java)
     }
 }

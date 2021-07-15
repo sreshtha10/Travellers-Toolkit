@@ -49,7 +49,7 @@ class LanguageFragment : Fragment() {
 
         setUpSpinnerAdapter()
 
-        binding?.tvOutputLang?.movementMethod =  ScrollingMovementMethod()
+        binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
 
         binding?.etInputLang?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -144,7 +144,7 @@ class LanguageFragment : Fragment() {
 
 
     fun translate(keyIp: String, keyOp: String, inputText: String) {
-        try{
+        try {
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.fromLanguageTag(keyIp))
                 .setTargetLanguage(TranslateLanguage.fromLanguageTag(keyOp))
@@ -164,7 +164,7 @@ class LanguageFragment : Fragment() {
                     .addOnSuccessListener {
                         Log.d("LangDownloadModel", "success")
                         downloadingDialog?.dismissDialog()
-                        try{
+                        try {
                             translator.translate(inputText)
                                 .addOnSuccessListener {
                                     Log.d("LangTranslateModel", "success")
@@ -174,9 +174,8 @@ class LanguageFragment : Fragment() {
                                     Log.d("LangTranslateModel", it.message.toString())
                                     downloadingDialog?.dismissDialog()
                                 }
-                        }
-                        catch(e:Exception){
-                            Log.e("TranslateError",e.message.toString())
+                        } catch (e: Exception) {
+                            Log.e("TranslateError", e.message.toString())
                         }
 
                     }
@@ -185,8 +184,7 @@ class LanguageFragment : Fragment() {
                         downloadingDialog?.dismissDialog()
                     }
             }
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             Toast.makeText(
                 activity,
                 e.message.toString(),
