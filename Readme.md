@@ -65,4 +65,4 @@ ___
 
 ## Licensing
 
-* Conversion Buddy is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/sreshtha10/Jokex/blob/master/LICENSE) for the full license text.
+* Conversion Buddy is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/sreshtha10/ConversionBuddy/blob/master/LICENSE) for the full license text.
