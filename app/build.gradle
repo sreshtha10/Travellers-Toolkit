@@ -71,7 +71,7 @@ dependencies {
     //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    //Lifecyclescope
+    //Lifecycle scope
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
 
     //Coroutines

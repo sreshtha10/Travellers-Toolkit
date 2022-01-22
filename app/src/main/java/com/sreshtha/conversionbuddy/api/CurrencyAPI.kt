@@ -1,4 +1,4 @@
-package com.sreshtha.conversionbuddy.api.currency
+package com.sreshtha.conversionbuddy.api
 
 
 import com.sreshtha.conversionbuddy.models.CurrencyResponse
