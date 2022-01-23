@@ -10,20 +10,20 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
 import com.sreshtha.conversionbuddy.models.CurrencyResponse
-import com.sreshtha.conversionbuddy.models.CurrencyViewModel
-import com.sreshtha.conversionbuddy.models.CurrencyViewModelFactory
-import com.sreshtha.conversionbuddy.repository.Repository
+import com.sreshtha.conversionbuddy.viewmodel.CurrencyViewModel
+import com.sreshtha.conversionbuddy.ui.MainActivity
 import com.sreshtha.conversionbuddy.ui.dialog.CustomLoadingDialog
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 
 
+@AndroidEntryPoint
 class CurrencyFragment : Fragment() {
     private var binding: FragmentCurrencyBinding? = null
     private var rates: HashMap<String, Double>? = null
@@ -41,10 +41,7 @@ class CurrencyFragment : Fragment() {
     ): View? {
         binding = FragmentCurrencyBinding.inflate(inflater, container, false)
 
-        //setting up the viewModel
-        val repository = Repository()
-        val viewModelFactory = CurrencyViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(CurrencyViewModel::class.java)
+        viewModel = (activity as MainActivity).viewModel
 
         // loading custom dialog till the network call is completed.
         val loadingDialog = activity?.let { CustomLoadingDialog(it) }
