@@ -1,5 +1,8 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -13,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.common.model.DownloadConditions
@@ -32,13 +37,19 @@ import java.util.*
 class LanguageFragment : Fragment() {
 
     companion object{
-        val TAG = "LanguageFragment"
+       const val TAG = "LanguageFragment"
     }
     private var binding: FragmentLanguageBinding? = null
     var detectedLang: String? = null
     var langOutput: String? = null
     private var textToSpeech: TextToSpeech? = null
 
+
+    private val permissionReqLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        if(it == true){
+            convertSpeechToText()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +64,8 @@ class LanguageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         textToSpeech = TextToSpeech(activity
         ) { status ->
@@ -120,7 +133,7 @@ class LanguageFragment : Fragment() {
             } else {
                 Toast.makeText(
                     activity,
-                    "Cannot Translate !${detectedLang}  ${keyLangOutput}",
+                    "Cannot Translate !${detectedLang}  $keyLangOutput",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -130,6 +143,23 @@ class LanguageFragment : Fragment() {
         binding?.apply {
             btnTextToSpeech.setOnClickListener {
                 convertTextToSpeech()
+            }
+        }
+
+        binding?.apply {
+            btnSpeechToText.setOnClickListener {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    convertSpeechToText()
+                }
+                activity?.let {
+                    if (hasAudioPermission(activity as Context)) {
+                        convertSpeechToText()
+                    } else {
+                        permissionReqLauncher.launch(
+                            Manifest.permission.RECORD_AUDIO
+                        )
+                    }
+                }
             }
         }
 
@@ -223,18 +253,25 @@ class LanguageFragment : Fragment() {
 
     }
 
+
+    private fun hasAudioPermission(context:Context):Boolean{
+       return ActivityCompat.checkSelfPermission(context,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun convertTextToSpeech(){
         binding?.apply {
             val text = tvOutputLang.text
             if(text.isNotEmpty()){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    textToSpeech?.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                    textToSpeech?.speak(text,TextToSpeech.QUEUE_FLUSH,null,null)
                 } else {
-                    textToSpeech?.speak(text as String?, TextToSpeech.QUEUE_FLUSH, null);
+                    textToSpeech?.speak(text as String?, TextToSpeech.QUEUE_FLUSH, null)
                 }
             }
         }
     }
+
+    private fun convertSpeechToText(){}
 
 
 
