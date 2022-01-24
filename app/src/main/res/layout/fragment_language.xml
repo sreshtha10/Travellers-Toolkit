@@ -87,4 +87,25 @@
         app:layout_constraintTop_toBottomOf="@+id/et_input_lang" />
 
 
+    <Button
+        android:id="@+id/btn_text_to_speech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speech Test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_output_lang" />
+
+    <Button
+        android:id="@+id/btn_speech_to_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Speech to Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_text_to_speech" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

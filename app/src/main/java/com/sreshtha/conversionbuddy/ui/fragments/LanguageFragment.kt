@@ -1,6 +1,8 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
@@ -24,13 +26,18 @@ import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 class LanguageFragment : Fragment() {
 
+    companion object{
+        val TAG = "LanguageFragment"
+    }
     private var binding: FragmentLanguageBinding? = null
     var detectedLang: String? = null
     var langOutput: String? = null
+    private var textToSpeech: TextToSpeech? = null
 
 
     override fun onCreateView(
@@ -47,6 +54,18 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        textToSpeech = TextToSpeech(activity
+        ) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech?.setLanguage(Locale.getDefault())
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    // error
+                    Log.d(TAG,"failed")
+                } else {
+                    convertTextToSpeech()
+                }
+            }
+        }
         setUpSpinnerAdapter()
 
         binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
@@ -108,12 +127,22 @@ class LanguageFragment : Fragment() {
 
         }
 
+        binding?.apply {
+            btnTextToSpeech.setOnClickListener {
+                convertTextToSpeech()
+            }
+        }
+
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+        textToSpeech?.apply {
+            stop()
+            shutdown()
+        }
     }
 
 
@@ -143,7 +172,7 @@ class LanguageFragment : Fragment() {
     }
 
 
-    fun translate(keyIp: String, keyOp: String, inputText: String) {
+    private fun translate(keyIp: String, keyOp: String, inputText: String) {
         try {
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.fromLanguageTag(keyIp))
@@ -193,6 +222,20 @@ class LanguageFragment : Fragment() {
         }
 
     }
+
+    private fun convertTextToSpeech(){
+        binding?.apply {
+            val text = tvOutputLang.text
+            if(text.isNotEmpty()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    textToSpeech?.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+                } else {
+                    textToSpeech?.speak(text as String?, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+        }
+    }
+
 
 
 }
