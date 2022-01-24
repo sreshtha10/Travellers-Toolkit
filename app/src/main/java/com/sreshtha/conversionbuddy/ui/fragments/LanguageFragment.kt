@@ -2,9 +2,13 @@ package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,6 +31,7 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
+import com.sreshtha.conversionbuddy.ui.MainActivity
 import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +48,9 @@ class LanguageFragment : Fragment() {
     var detectedLang: String? = null
     var langOutput: String? = null
     private var textToSpeech: TextToSpeech? = null
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var audioIntent:Intent
+    private var isListening = false
 
 
     private val permissionReqLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
@@ -66,19 +74,8 @@ class LanguageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-        textToSpeech = TextToSpeech(activity
-        ) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                val result = textToSpeech?.setLanguage(Locale.getDefault())
-                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    // error
-                    Log.d(TAG,"failed")
-                } else {
-                    convertTextToSpeech()
-                }
-            }
-        }
+        initializeTextToSpeech()
+        initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
 
         binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
@@ -258,6 +255,67 @@ class LanguageFragment : Fragment() {
        return ActivityCompat.checkSelfPermission(context,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
     }
 
+
+    private fun initializeTextToSpeech(){
+        textToSpeech = TextToSpeech(activity
+        ) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech?.setLanguage(Locale.getDefault())
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    // error
+                    Log.d(TAG,"failed")
+                } else {
+                    convertTextToSpeech()
+                }
+            }
+        }
+    }
+
+    private fun initializeSpeechToText(context: Context){
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        audioIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        audioIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        audioIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,Locale.getDefault())
+        speechRecognizer.setRecognitionListener(object :RecognitionListener{
+            override fun onReadyForSpeech(params: Bundle?) {
+            }
+
+            override fun onBeginningOfSpeech() {
+                binding?.apply {
+                    etInputLang.setText("")
+                    etInputLang.hint = "Listening..."
+                }
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+            }
+
+            override fun onEndOfSpeech() {
+            }
+
+            override fun onError(error: Int) {
+            }
+
+            override fun onResults(results: Bundle?) {
+                val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                data?.apply {
+                    binding?.apply {
+                        etInputLang.setText(data[0])
+                    }
+                }
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+            }
+        })
+    }
+
     private fun convertTextToSpeech(){
         binding?.apply {
             val text = tvOutputLang.text
@@ -271,8 +329,14 @@ class LanguageFragment : Fragment() {
         }
     }
 
-    private fun convertSpeechToText(){}
-
-
-
+    private fun convertSpeechToText(){
+        if(isListening){
+            speechRecognizer.stopListening()
+            isListening = false
+        }
+        else{
+            isListening = true
+            speechRecognizer.startListening(audioIntent)
+        }
+    }
 }
