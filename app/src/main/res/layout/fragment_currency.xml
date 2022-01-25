@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_curr_op" />
 
-    <Spinner
+    <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
         android:id="@+id/sp_curr_ip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         />
 
-    <Spinner
+    <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
         android:id="@+id/sp_curr_op"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
