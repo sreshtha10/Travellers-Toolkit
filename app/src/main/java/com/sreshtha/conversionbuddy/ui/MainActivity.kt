@@ -20,13 +20,11 @@ class MainActivity : AppCompatActivity() {
     val viewModel: CurrencyViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_ConversionBuddy)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navHost = supportFragmentManager.findFragmentById(R.id.fragment_container)  as NavHost
         binding.bottomNavigationView.setupWithNavController(navHost.navController)
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

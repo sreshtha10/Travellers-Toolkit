@@ -75,95 +75,14 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         initializeTextToSpeech()
         initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
-
         binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
-
-        binding?.etInputLang?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                detectLang(s.toString())
-                if (detectedLang != null) {
-                    binding?.tvDetectedLang?.text = Constants.map[detectedLang]
-                }
-            }
-        })
-
-
-
-        binding?.spinnerLang?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                langOutput = parent?.getItemAtPosition(position) as String?
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-
-
-        binding?.button?.setOnClickListener {
-            var keyLangOutput: String? = null
-            val inputText = binding!!.etInputLang.text.toString()
-            for ((key, value) in Constants.map.entries) {
-                if (value == langOutput) {
-                    keyLangOutput = key
-                }
-            }
-
-            if (detectedLang != null && keyLangOutput != null) {
-                translate(detectedLang!!, keyLangOutput, inputText)
-            } else {
-                Toast.makeText(
-                    activity,
-                    "Cannot Translate !${detectedLang}  $keyLangOutput",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-        }
-
-        binding?.apply {
-            btnTextToSpeech.setOnClickListener {
-                convertTextToSpeech()
-            }
-        }
-
-        binding?.apply {
-            btnSpeechToText.setOnClickListener {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    convertSpeechToText()
-                }
-                activity?.let {
-                    if (hasAudioPermission(activity as Context)) {
-                        convertSpeechToText()
-                    } else {
-                        permissionReqLauncher.launch(
-                            Manifest.permission.RECORD_AUDIO
-                        )
-                    }
-                }
-            }
-        }
+        initListeners()
 
     }
+
 
 
     override fun onDestroy() {
@@ -199,6 +118,86 @@ class LanguageFragment : Fragment() {
         val arr = resources.getStringArray(R.array.lang)
         val adapter = activity?.let { ArrayAdapter(it, R.layout.spinner_custom, arr) }
         binding?.spinnerLang?.adapter = adapter
+    }
+
+    private fun initListeners() {
+        binding?.apply {
+
+            button.setOnClickListener {
+                var keyLangOutput: String? = null
+                val inputText = binding!!.etInputLang.text.toString()
+                for ((key, value) in Constants.map.entries) {
+                    if (value == langOutput) {
+                        keyLangOutput = key
+                    }
+                }
+
+                if (detectedLang != null && keyLangOutput != null) {
+                    translate(detectedLang!!, keyLangOutput, inputText)
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Cannot Translate !${detectedLang}  $keyLangOutput",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            etInputLang.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    detectLang(s.toString())
+                    if (detectedLang != null) {
+                        binding?.tvDetectedLang?.text = Constants.map[detectedLang]
+                    }
+                }
+            })
+
+            spinnerLang.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    langOutput = parent?.getItemAtPosition(position) as String?
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+
+            btnTextToSpeech.setOnClickListener {
+                convertTextToSpeech()
+            }
+
+            btnSpeechToText.setOnClickListener {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    convertSpeechToText()
+                }
+                activity?.let {
+                    if (hasAudioPermission(activity as Context)) {
+                        convertSpeechToText()
+                    } else {
+                        permissionReqLauncher.launch(
+                            Manifest.permission.RECORD_AUDIO
+                        )
+                    }
+                }
+            }
+
+
+        }
     }
 
 

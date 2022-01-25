@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable/splash_background.xml" value="0.17962962962962964" />
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable/splash_image.xml" value="0.17962962962962964" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/custom_downloading_dialog.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/custom_loading_dialog.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/fragment_currency.xml" value="0.346875" />

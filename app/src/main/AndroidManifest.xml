@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ConversionBuddy"
+        android:theme="@style/SplashScreenTheme"
         android:allowBackup="true"
         android:fullBackupContent="true">
         <activity android:name=".ui.MainActivity"
