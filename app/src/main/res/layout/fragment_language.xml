@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <LinearLayout
-        android:id="@+id/ll_header"
+        android:id="@+id/ll_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:fontFamily="@font/montserratextrabold"
-            android:text="@string/language_translator"
-            android:textSize="24sp"
+            android:layout_marginTop="8dp"
             android:layout_weight="3"
-            />
+            android:fontFamily="@font/montserratextrabold"
+            android:gravity="center"
+            android:text="@string/language_translator"
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/iv_theme_btn"
@@ -36,99 +36,198 @@
             android:layout_height="44dp"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:cropToPadding="true"
             android:background="@drawable/ic_theme_change"
-            />
+            android:cropToPadding="true" />
 
     </LinearLayout>
 
 
-
-    <TextView
-        android:id="@+id/tv_detected_lang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_header" />
-
-    <EditText
-        android:id="@+id/et_input_lang"
+    <LinearLayout
+        android:id="@+id/ll_header"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detected_lang" />
-
-
-    <TextView
-        android:id="@+id/tv_output_lang"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:scrollbars="vertical"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
+        android:background="@drawable/language_header"
+        android:gravity="center"
         android:layout_marginTop="32dp"
-        android:text="@string/translate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_input_lang" />
-
-
-    <Button
-        android:id="@+id/btn_text_to_speech"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Text to speech"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_output_lang" />
+        app:layout_constraintTop_toBottomOf="@+id/ll_banner">
 
-    <Button
-        android:id="@+id/btn_speech_to_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speech to Text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_header" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Translate to "
+            android:layout_weight="2"
+            android:textSize="20sp"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/montserratbold"
+            />
+
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_translate_swap"/>
+
+        <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
+            android:layout_width="wrap_content"
+            android:id="@+id/spinner_lang"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_weight="2"
+            android:entries="@array/lang"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 
-    <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
-        android:id="@+id/spinner_lang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:entries="@array/lang"
-        app:hintText="Select Language"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/et_input_lang" />
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
+        android:layout_marginBottom="32dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:background="@drawable/language_text_area_background"
+            >
+
+            <TextView
+                android:id="@+id/tv_detected_lang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserratbolditalic"
+                android:textSize="14sp"
+                />
+
+
+            <EditText
+                android:paddingHorizontal="8dp"
+                android:id="@+id/et_input_lang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:textSize="18sp"
+                android:layout_weight="6"
+                android:background="@drawable/language_text_area_background"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/ll_ip_btn_pane"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/btn_speech_to_text"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="36dp"
+                    android:layout_gravity="center"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_mic"/>
+
+                <!-- todo voice indicator-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_margin="8dp"
+            android:background="@drawable/language_text_area_background"
+            >
+
+            <EditText
+                android:id="@+id/et_output_lang"
+                android:paddingHorizontal="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:fontFamily="@font/montserratregular"
+                android:textSize="18sp"
+                android:background="@drawable/language_text_area_background" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/black"/>
+
+            <LinearLayout
+                android:id="@+id/ll_op_btn_pane"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/btn_text_to_speech"
+                    android:layout_width="36dp"
+                    android:layout_gravity="center"
+                    android:layout_height="36dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_speaker"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_copy_to_clipboard"
+                    android:layout_margin="4dp"
+                    android:layout_width="36dp"
+                    android:layout_gravity="center"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_clipboard"/>
+
+                <!-- todo voice indicator-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_translate"
+            android:layout_weight="0.2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_translate_swap"
+            />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

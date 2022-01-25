@@ -1,6 +1,8 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.common.model.DownloadConditions
@@ -78,7 +81,7 @@ class LanguageFragment : Fragment() {
         initializeTextToSpeech()
         initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
-        binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
+        binding?.etOutputLang?.movementMethod = ScrollingMovementMethod()
         initListeners()
 
     }
@@ -123,7 +126,8 @@ class LanguageFragment : Fragment() {
     private fun initListeners() {
         binding?.apply {
 
-            button.setOnClickListener {
+
+            btnTranslate.setOnClickListener {
                 var keyLangOutput: String? = null
                 val inputText = binding!!.etInputLang.text.toString()
                 for ((key, value) in Constants.map.entries) {
@@ -142,6 +146,7 @@ class LanguageFragment : Fragment() {
                     ).show()
                 }
             }
+
 
             etInputLang.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -200,6 +205,15 @@ class LanguageFragment : Fragment() {
                 (activity as MainActivity).changeTheme()
             }
 
+            btnCopyToClipboard.setOnClickListener {
+                if(etOutputLang.text.isEmpty()){
+                    return@setOnClickListener
+                }
+                val clipboard = ContextCompat.getSystemService(activity as MainActivity, ClipboardManager::class.java)
+                clipboard?.setPrimaryClip(ClipData.newPlainText("",etOutputLang.text))
+                Toast.makeText(activity,"Text copied to clipboard!",Toast.LENGTH_SHORT).show()
+            }
+
 
         }
     }
@@ -230,7 +244,7 @@ class LanguageFragment : Fragment() {
                             translator.translate(inputText)
                                 .addOnSuccessListener {
                                     Log.d("LangTranslateModel", "success")
-                                    binding!!.tvOutputLang.text = it
+                                    binding!!.etOutputLang.setText(it)
                                 }
                                 .addOnFailureListener {
                                     Log.d("LangTranslateModel", it.message.toString())
@@ -324,7 +338,7 @@ class LanguageFragment : Fragment() {
 
     private fun convertTextToSpeech(){
         binding?.apply {
-            val text = tvOutputLang.text
+            val text = etOutputLang.text
             if(text.isNotEmpty()){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     textToSpeech?.speak(text,TextToSpeech.QUEUE_FLUSH,null,null)
