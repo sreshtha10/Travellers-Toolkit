@@ -14,8 +14,7 @@ import com.sreshtha.conversionbuddy.databinding.ActivityMainBinding
 import com.sreshtha.conversionbuddy.viewmodel.CurrencyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-
- @AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     val viewModel: CurrencyViewModel by viewModels()

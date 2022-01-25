@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/fragment_currency.xml" value="0.346875" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/fragment_language.xml" value="0.3268698060941828" />
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/layout/searchable_list_dialog.xml" value="0.3619791666666667" />
       </map>
     </option>
   </component>

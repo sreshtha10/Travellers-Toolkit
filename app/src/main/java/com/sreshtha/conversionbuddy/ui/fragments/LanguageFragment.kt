@@ -34,11 +34,13 @@ import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
 import com.sreshtha.conversionbuddy.ui.MainActivity
 import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 
+@AndroidEntryPoint
 class LanguageFragment : Fragment() {
 
     companion object{
@@ -76,7 +78,7 @@ class LanguageFragment : Fragment() {
 
         initializeTextToSpeech()
         initializeSpeechToText(activity as MainActivity)
-        setUpSpinnerAdapter()
+        //setUpSpinnerAdapter()
 
         binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
 
@@ -98,6 +100,7 @@ class LanguageFragment : Fragment() {
         })
 
 
+        /*
         binding?.spinnerLang?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -112,7 +115,7 @@ class LanguageFragment : Fragment() {
 
             }
 
-        }
+        }*/
 
 
 
@@ -192,11 +195,11 @@ class LanguageFragment : Fragment() {
     }
 
 
-    private fun setUpSpinnerAdapter() {
+    /*private fun setUpSpinnerAdapter() {
         val arr = resources.getStringArray(R.array.lang)
         val adapter = activity?.let { ArrayAdapter(it, R.layout.spinner_custom, arr) }
         binding?.spinnerLang?.adapter = adapter
-    }
+    }*/
 
 
     private fun translate(keyIp: String, keyOp: String, inputText: String) {
