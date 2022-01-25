@@ -196,6 +196,10 @@ class LanguageFragment : Fragment() {
                 }
             }
 
+            ivThemeBtn.setOnClickListener {
+                (activity as MainActivity).changeTheme()
+            }
+
 
         }
     }

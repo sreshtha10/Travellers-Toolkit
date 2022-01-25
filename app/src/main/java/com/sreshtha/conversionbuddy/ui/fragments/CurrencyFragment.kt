@@ -210,6 +210,10 @@ class CurrencyFragment : Fragment() {
             }
         })
 
+        binding?.ivThemeBtn?.setOnClickListener {
+            (activity as MainActivity).changeTheme()
+        }
+
     }
 
 

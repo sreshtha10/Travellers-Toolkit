@@ -5,19 +5,41 @@
     android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/montserratextrabold"
-        android:textColor="?colorOnSecondary"
-        android:text="@string/currency_converter"
-        android:textSize="24sp"
+        android:id="@+id/ll_header"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserratextrabold"
+            android:layout_weight="3"
+            android:text="@string/currency_converter"
+            android:textSize="24sp"
+             />
+        <ImageView
+            android:id="@+id/iv_theme_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_theme_change"
+            android:layout_marginTop="8dp"
+            android:cropToPadding="true"
+            />
+    </LinearLayout>
+
+
 
 
 
@@ -60,7 +82,7 @@
         android:entries="@array/codes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
         />
 
     <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
@@ -80,7 +102,7 @@
         android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sp_curr_ip"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
         app:srcCompat="@drawable/aed" />
 
     <ImageView
