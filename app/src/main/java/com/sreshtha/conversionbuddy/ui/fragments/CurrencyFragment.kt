@@ -10,17 +10,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.charts.BarChart
 import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
 import com.sreshtha.conversionbuddy.models.CurrencyResponse
-import com.sreshtha.conversionbuddy.viewmodel.CurrencyViewModel
 import com.sreshtha.conversionbuddy.ui.MainActivity
 import com.sreshtha.conversionbuddy.ui.dialog.CustomLoadingDialog
+import com.sreshtha.conversionbuddy.viewmodel.CurrencyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 
 @AndroidEntryPoint
@@ -28,6 +28,7 @@ class CurrencyFragment : Fragment() {
     private var binding: FragmentCurrencyBinding? = null
     private var rates: HashMap<String, Double>? = null
     private lateinit var viewModel: CurrencyViewModel
+    private var barchart:BarChart? = null
 
 
     private var ipCountry = "AED"
@@ -40,9 +41,50 @@ class CurrencyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCurrencyBinding.inflate(inflater, container, false)
-
         viewModel = (activity as MainActivity).viewModel
+        barchart= binding?.barChart
 
+        apiCall()
+
+
+        return binding?.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // setting up spinner's  custom adapter
+        setUpCustomSpinnerAdapter()
+        //default selection
+        binding?.spCurrIp?.setSelection(66) //INR
+        binding?.spCurrOp?.setSelection(150) //USD
+        initListeners()
+
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
+
+    private fun setUpCustomSpinnerAdapter() {
+        val arr = resources.getStringArray(R.array.codes)
+        val adapter = activity?.let { ArrayAdapter(it, R.layout.spinner_custom, arr) }
+        adapter?.setDropDownViewResource(R.layout.spinner_custom)
+        binding?.spCurrIp?.adapter = adapter
+        binding?.spCurrOp?.adapter = adapter
+    }
+
+
+    private fun clearFields(){
+        binding?.tvCurrencyOp?.text = (0).toString()
+        binding?.etCurrencyIp?.text?.clear()
+    }
+
+
+    private fun apiCall(){
         // loading custom dialog till the network call is completed.
         val loadingDialog = activity?.let { CustomLoadingDialog(it) }
         loadingDialog?.startLoadingDialog()
@@ -71,173 +113,135 @@ class CurrencyFragment : Fragment() {
             }
         })
 
-        //end of network call
-        return binding?.root
     }
 
+    private fun initListeners(){
+        binding?.apply {
+            spCurrIp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                    //updating the current ip country
+                    ipCountry = currencyCode.uppercase()
+                    tvIpCurrCode.text = ipCountry
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+                    //changing the flag resource.
+                    try {
+                        if (currencyCode != "try") {
+                            val imageRes = resources.getIdentifier(
+                                "drawable/$currencyCode",
+                                "drawable",
+                                activity?.packageName
+                            )
+                            ivFlagsIp.setImageResource(imageRes)
+                        } else {
+                            // special case
+                            val imageRes = resources.getIdentifier(
+                                "drawable/turkey",
+                                "drawable",
+                                activity?.packageName
+                            )
+                            ivFlagsIp.setImageResource(imageRes)
+                        }
 
+                    } catch (e: Exception) {
+                        ivFlagsIp.setImageResource(0)
+                        Log.e("CurrError",e.message.toString())
+                    }
 
+                    clearFields()
+                }
 
+                override fun onNothingSelected(parent: AdapterView<*>?) {
 
-        // setting up spinner's  custom adapter
-        setUpCustomSpinnerAdapter()
+                }
+            }
 
-        binding?.spCurrIp?.setSelection(66) //INR
-        binding?.spCurrOp?.setSelection(150) //USD
+            //when output spinner's item is selected -> update flags & update currency
+            spCurrOp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
+                    opCountry = currencyCode.uppercase()
+                    tvOpCurrCode.text = opCountry
+                    try {
+                        if (currencyCode != "try") {
+                            val imageRes = resources.getIdentifier(
+                                "drawable/$currencyCode",
+                                "drawable",
+                                activity?.packageName
+                            )
+                            ivFlagsOp.setImageResource(imageRes)
+                        } else {
+                            // special case
+                            val imageRes = resources.getIdentifier(
+                                "drawable/turkey",
+                                "drawable",
+                                activity?.packageName
+                            )
+                            ivFlagsOp.setImageResource(imageRes)
+                        }
 
+                    } catch (e: Exception) {
+                        ivFlagsOp.setImageResource(0)
+                        Log.e("CurrError",e.message.toString())
+                    }
 
-        binding?.spCurrIp?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
-                //updating the current ip country
-                ipCountry = currencyCode.uppercase()
+                    clearFields()
 
-                //changing the flag resource.
-                try {
-                    if (currencyCode != "try") {
-                        val imageRes = resources.getIdentifier(
-                            "drawable/$currencyCode",
-                            "drawable",
-                            activity?.packageName
-                        )
-                        binding?.imageView?.setImageResource(imageRes)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+            }
+
+            // text watcher for the currency input
+            etCurrencyIp.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (etCurrencyIp.text.isEmpty() || s == null) {
+                        tvCurrencyOp.text = (0).toString()
+                        return
+                    }
+                    if (rates == null) {
+                        return
                     } else {
-                        // special case
-                        val imageRes = resources.getIdentifier(
-                            "drawable/turkey",
-                            "drawable",
-                            activity?.packageName
-                        )
-                        binding?.imageView?.setImageResource(imageRes)
+                        try{
+                            val ipCurr = rates!![ipCountry]
+                            val opCurr = rates!![opCountry]
+                            val amount = (s.toString().toFloat()) * (opCurr!!) / (ipCurr!!)
+                            tvCurrencyOp.text = amount.toString()
+                        }
+                        catch (e:Exception){
+                            Log.e("ConversionError",e.message.toString())
+                            clearFields()
+                        }
                     }
-
-                } catch (e: Exception) {
-                    binding?.imageView?.setImageResource(0)
-                    Log.e("CurrError",e.message.toString())
                 }
 
-                clearFields()
-            }
+                override fun afterTextChanged(s: Editable?) {
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-        //when output spinner's item is selected -> update flags & update currency
-        binding?.spCurrOp?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
-                opCountry = currencyCode.uppercase()
-                try {
-                    if (currencyCode != "try") {
-                        val imageRes = resources.getIdentifier(
-                            "drawable/$currencyCode",
-                            "drawable",
-                            activity?.packageName
-                        )
-                        binding?.imageView2?.setImageResource(imageRes)
-                    } else {
-                        // special case
-                        val imageRes = resources.getIdentifier(
-                            "drawable/turkey",
-                            "drawable",
-                            activity?.packageName
-                        )
-                        binding?.imageView2?.setImageResource(imageRes)
-                    }
-
-                } catch (e: Exception) {
-                    binding?.imageView2?.setImageResource(0)
-                    Log.e("CurrError",e.message.toString())
                 }
+            })
 
-                clearFields()
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+            ivThemeBtn.setOnClickListener {
+                (activity as MainActivity).changeTheme()
             }
 
         }
-
-
-
-
-
-        // text watcher for the currency input
-        binding?.etCurrencyIp?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding!!.etCurrencyIp.text.isEmpty() || s == null) {
-                    binding!!.tvCurrencyOp.text = (0).toString()
-                    return
-                }
-                if (rates == null) {
-                    return
-                } else {
-                    try{
-                        val ipCurr = rates!![ipCountry]
-                        val opCurr = rates!![opCountry]
-                        val amount = (s.toString().toFloat()) * (opCurr!!) / (ipCurr!!)
-                        binding!!.tvCurrencyOp.text = amount.toString()
-                    }
-                    catch (e:Exception){
-                        Log.e("ConversionError",e.message.toString())
-                        clearFields()
-                    }
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        })
-
-        binding?.ivThemeBtn?.setOnClickListener {
-            (activity as MainActivity).changeTheme()
-        }
-
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
-    }
-
-
-    private fun setUpCustomSpinnerAdapter() {
-        val arr = resources.getStringArray(R.array.codes)
-        val adapter = activity?.let { ArrayAdapter(it, R.layout.spinner_custom, arr) }
-        adapter?.setDropDownViewResource(R.layout.spinner_custom)
-        binding?.spCurrIp?.adapter = adapter
-        binding?.spCurrOp?.adapter = adapter
-    }
-
-
-    private fun clearFields(){
-        binding?.tvCurrencyOp?.text = (0).toString()
-        binding?.etCurrencyIp?.text?.clear()
-    }
-
-
 
 
 }
