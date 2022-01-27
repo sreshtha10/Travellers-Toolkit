@@ -64,10 +64,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 
     //Translation ML kit
-    implementation 'com.google.mlkit:translate:16.1.2'
+    implementation 'com.google.mlkit:translate:17.0.0'
 
     // Language Detection
-    implementation 'com.google.mlkit:language-id:17.0.2'
+    implementation 'com.google.mlkit:language-id:17.0.3'
 
     //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
