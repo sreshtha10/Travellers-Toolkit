@@ -1,110 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/noto"
-        android:textColor="?colorOnSecondary"
-        android:text="@string/currency_converter"
-        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_banner"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_gravity="center"
+            android:textColor="@color/text_color"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserratextrabold"
+            android:layout_weight="3"
+            android:text="@string/currency_converter"
+            android:textSize="24sp"
+            />
+        <ImageView
+            android:id="@+id/iv_theme_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_theme_change"
+            android:layout_marginTop="8dp"
+            android:cropToPadding="true"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
-
-    <EditText
-        android:id="@+id/et_currency_ip"
-        android:layout_width="wrap_content"
-        android:text="0"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:inputType="number"
-        android:minWidth="150dp"
-        android:textColor="?colorOnSecondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_curr_ip"
-         />
-
-    <TextView
-        android:id="@+id/tv_currency_op"
-        android:layout_width="wrap_content"
-        android:text="0"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:textColor="?colorOnSecondary"
-        android:minWidth="150dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_curr_op" />
-
-    <Spinner
-        android:id="@+id/sp_curr_ip"
-        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ll_banner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:entries="@array/codes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        />
+        android:background="@drawable/language_header"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/sp_curr_op"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:entries="@array/codes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sp_curr_ip"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:srcCompat="@drawable/aed" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sp_curr_op"
-        app:layout_constraintTop_toBottomOf="@+id/et_currency_ip"
-        app:srcCompat="@drawable/aed" />
+        <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
+            android:id="@+id/sp_curr_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginStart="16dp"
+            android:entries="@array/codes"
+            android:textAlignment="center" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="68dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_conversion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_currency_ip" />
+        <ImageView
+            android:id="@+id/iv_flags_ip"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@drawable/inr" />
 
-    
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/ic_translate_swap" />
+
+
+
+        <com.sreshtha.conversionbuddy.ui.dialog.spinner.SearchableSpinner
+            android:id="@+id/sp_curr_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:entries="@array/codes"
+            android:textAlignment="center" />
+
+        <ImageView
+            android:id="@+id/iv_flags_op"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:src="@drawable/usd" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_header"
+        tools:layout_editor_absoluteX="8dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="44dp">
+
+            <EditText
+                android:id="@+id/et_currency_ip"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:padding="4dp"
+                android:layout_weight="4"
+                android:fontFamily="@font/montserratbold"
+                android:background="@drawable/language_text_area_background"
+              />
+
+            <TextView
+                android:padding="4dp"
+                android:textColor="@color/text_color"
+                android:textSize="20sp"
+                android:fontFamily="@font/montserratbolditalic"
+                android:layout_weight="1"
+                android:id="@+id/tv_ip_curr_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_currency_op"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:maxLines="1"
+                android:textSize="22sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:padding="4dp"
+                android:layout_weight="4"
+                android:fontFamily="@font/montserratbold"
+                android:background="@drawable/language_text_area_background"
+                />
+
+            <TextView
+                android:padding="4dp"
+                android:textSize="20sp"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/montserratbolditalic"
+                android:layout_weight="1"
+                android:id="@+id/tv_op_curr_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+        <View
+            android:layout_marginVertical="32dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/hr_color"
+            />
+
+        <LinearLayout
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="44dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tv_curr_one"
+                android:layout_weight="2"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/montserratmedium"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/tv_code_one"
+                android:layout_weight="1"
+                android:textColor="@color/text_color"
+                android:textSize="12sp"
+                android:fontFamily="@font/montserratbolditalic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_equals"
+                android:layout_weight="1"
+                android:tint="@color/btn_color"
+                android:src="@drawable/ic_equals"/>
+
+            <TextView
+                android:layout_weight="2"
+                android:textColor="@color/text_color"
+                android:id="@+id/tv_curr_not_one"
+                android:fontFamily="@font/montserratmedium"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_code_not_one"
+                android:textColor="@color/text_color"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:fontFamily="@font/montserratbolditalic"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

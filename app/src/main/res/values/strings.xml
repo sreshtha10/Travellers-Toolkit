@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConversionBuddy</string>
+    <string name="app_name">Traveller\'s Toolkit</string>
     <string name="language">Language</string>
     <string name="currency">Currency</string>
     <string name="currency_fragment">Currency Fragment</string>

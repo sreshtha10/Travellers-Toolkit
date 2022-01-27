@@ -1,6 +1,17 @@
 package com.sreshtha.conversionbuddy.ui.fragments
 
+import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.ScrollingMovementMethod
@@ -10,7 +21,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Scroller
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.common.model.DownloadConditions
@@ -20,18 +35,35 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentLanguageBinding
+import com.sreshtha.conversionbuddy.ui.MainActivity
 import com.sreshtha.conversionbuddy.ui.dialog.CustomDownloadingDialog
 import com.sreshtha.conversionbuddy.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
+@AndroidEntryPoint
 class LanguageFragment : Fragment() {
 
+    companion object{
+       const val TAG = "LanguageFragment"
+    }
     private var binding: FragmentLanguageBinding? = null
     var detectedLang: String? = null
     var langOutput: String? = null
+    private var textToSpeech: TextToSpeech? = null
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var audioIntent:Intent
+    private var isListening = false
 
+
+    private val permissionReqLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        if(it == true){
+            convertSpeechToText()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,73 +79,23 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
-
-        binding?.tvOutputLang?.movementMethod = ScrollingMovementMethod()
-
-        binding?.etInputLang?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                detectLang(s.toString())
-                if (detectedLang != null) {
-                    binding?.tvDetectedLang?.text = Constants.map[detectedLang]
-                }
-            }
-        })
-
-
-        binding?.spinnerLang?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                langOutput = parent?.getItemAtPosition(position) as String?
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-
-
-
-        binding?.button?.setOnClickListener {
-            var keyLangOutput: String? = null
-            val inputText = binding!!.etInputLang.text.toString()
-            for ((key, value) in Constants.map.entries) {
-                if (value == langOutput) {
-                    keyLangOutput = key
-                }
-            }
-
-            if (detectedLang != null && keyLangOutput != null) {
-                translate(detectedLang!!, keyLangOutput, inputText)
-            } else {
-                Toast.makeText(
-                    activity,
-                    "Cannot Translate !${detectedLang}  ${keyLangOutput}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-        }
+        initListeners()
+        binding?.spinnerLang?.setSelection(22)
 
     }
+
 
 
     override fun onDestroy() {
         super.onDestroy()
         binding = null
+        textToSpeech?.apply {
+            stop()
+            shutdown()
+        }
     }
 
 
@@ -142,8 +124,113 @@ class LanguageFragment : Fragment() {
         binding?.spinnerLang?.adapter = adapter
     }
 
+    private fun initListeners() {
+        binding?.apply {
 
-    fun translate(keyIp: String, keyOp: String, inputText: String) {
+
+            btnTranslate.setOnClickListener {
+                var keyLangOutput: String? = null
+                val inputText = binding!!.etInputLang.text.toString()
+                for ((key, value) in Constants.map.entries) {
+                    if (value == langOutput) {
+                        keyLangOutput = key
+                    }
+                }
+
+                if (detectedLang != null && keyLangOutput != null) {
+                    translate(detectedLang!!, keyLangOutput, inputText)
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Cannot Translate !${detectedLang}  $keyLangOutput",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+
+            etInputLang.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    detectLang(s.toString())
+                    if (detectedLang != null) {
+                        binding?.tvDetectedLang?.text = Constants.map[detectedLang]
+                    }
+                }
+            })
+
+            spinnerLang.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    langOutput = parent?.getItemAtPosition(position) as String?
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+
+
+            btnTextToSpeech.setOnClickListener {
+                initializeTextToSpeech()
+                convertTextToSpeech()
+            }
+
+            btnSpeechToText.setOnClickListener {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    convertSpeechToText()
+                }
+                activity?.let {
+                    if (hasAudioPermission(activity as Context)) {
+                        convertSpeechToText()
+                    } else {
+                        permissionReqLauncher.launch(
+                            Manifest.permission.RECORD_AUDIO
+                        )
+                    }
+                }
+            }
+
+            ivThemeBtn.setOnClickListener {
+                (activity as MainActivity).changeTheme()
+            }
+
+            btnCopyToClipboard.setOnClickListener {
+                if(etOutputLang.text.isEmpty()){
+                    return@setOnClickListener
+                }
+                val clipboard = ContextCompat.getSystemService(activity as MainActivity, ClipboardManager::class.java)
+                clipboard?.setPrimaryClip(ClipData.newPlainText("",etOutputLang.text))
+                Toast.makeText(activity,"Text copied to clipboard!",Toast.LENGTH_SHORT).show()
+            }
+
+            etInputLang.setScroller(Scroller(activity))
+            etInputLang.maxLines = 3
+            etInputLang.isVerticalScrollBarEnabled = true
+            etInputLang.movementMethod = ScrollingMovementMethod()
+
+            etOutputLang.setScroller(Scroller(activity))
+            etOutputLang.isVerticalScrollBarEnabled = true
+            etOutputLang.movementMethod = ScrollingMovementMethod()
+            etOutputLang.maxLines = 3
+
+        }
+    }
+
+
+    private fun translate(keyIp: String, keyOp: String, inputText: String) {
         try {
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(TranslateLanguage.fromLanguageTag(keyIp))
@@ -168,7 +255,7 @@ class LanguageFragment : Fragment() {
                             translator.translate(inputText)
                                 .addOnSuccessListener {
                                     Log.d("LangTranslateModel", "success")
-                                    binding!!.tvOutputLang.text = it
+                                    binding!!.etOutputLang.setText(it)
                                 }
                                 .addOnFailureListener {
                                     Log.d("LangTranslateModel", it.message.toString())
@@ -195,4 +282,93 @@ class LanguageFragment : Fragment() {
     }
 
 
+    private fun hasAudioPermission(context:Context):Boolean{
+       return ActivityCompat.checkSelfPermission(context,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    private fun initializeTextToSpeech(){
+        textToSpeech = TextToSpeech(activity
+        ) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = textToSpeech?.setLanguage(Locale.getDefault())
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    // error
+                    Log.d(TAG,"failed")
+                } else {
+                    convertTextToSpeech()
+                }
+            }
+        }
+    }
+
+    private fun initializeSpeechToText(context: Context){
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        audioIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        audioIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        audioIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,Locale.getDefault())
+        speechRecognizer.setRecognitionListener(object :RecognitionListener{
+            override fun onReadyForSpeech(params: Bundle?) {
+            }
+
+            override fun onBeginningOfSpeech() {
+                binding?.apply {
+                    etInputLang.setText("")
+                    etInputLang.hint = "Listening..."
+                }
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+            }
+
+            override fun onEndOfSpeech() {
+            }
+
+            override fun onError(error: Int) {
+            }
+
+            override fun onResults(results: Bundle?) {
+                val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                data?.apply {
+                    binding?.apply {
+                        etInputLang.setText(data[0])
+                    }
+                }
+            }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+            }
+        })
+    }
+
+    private fun convertTextToSpeech(){
+        binding?.apply {
+            val text = etOutputLang.text
+            if(text.isNotEmpty()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    textToSpeech?.speak(text,TextToSpeech.QUEUE_FLUSH,null,null)
+                } else {
+                    textToSpeech?.speak(text as String?, TextToSpeech.QUEUE_FLUSH, null)
+                }
+            }
+        }
+    }
+
+    private fun convertSpeechToText(){
+        if(isListening){
+            speechRecognizer.stopListening()
+            isListening = false
+            binding?.etInputLang?.hint = ""
+        }
+        else{
+            isListening = true
+            speechRecognizer.startListening(audioIntent)
+        }
+    }
 }
