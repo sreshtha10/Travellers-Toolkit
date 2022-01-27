@@ -63,15 +63,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Translate"
+            android:text="@string/translate"
+            android:maxLines="1"
             android:layout_weight="2"
             android:textSize="20sp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/montserratbold"
             />
 
         <ImageView
             android:layout_weight="1"
+            android:layout_marginHorizontal="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_translate_swap"/>
@@ -80,7 +82,7 @@
             android:layout_width="wrap_content"
             android:id="@+id/spinner_lang"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="2"
             android:entries="@array/lang"
             android:textAlignment="center" />

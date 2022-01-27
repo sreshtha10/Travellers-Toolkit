@@ -82,8 +82,8 @@ class LanguageFragment : Fragment() {
         initializeTextToSpeech()
         initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
-        binding?.etOutputLang?.movementMethod = ScrollingMovementMethod()
         initListeners()
+        binding?.spinnerLang?.setSelection(22)
 
     }
 
