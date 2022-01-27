@@ -114,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserratbolditalic"
                 android:textSize="14sp"

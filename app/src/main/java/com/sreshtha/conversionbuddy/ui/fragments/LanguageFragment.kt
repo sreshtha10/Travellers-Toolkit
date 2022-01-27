@@ -80,9 +80,10 @@ class LanguageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        initListeners()
         initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
-        initListeners()
+
         binding?.spinnerLang?.setSelection(22)
 
     }
@@ -159,6 +160,7 @@ class LanguageFragment : Fragment() {
                 }
 
                 override fun afterTextChanged(s: Editable?) {
+                    Log.d("COMP","$s")
                     detectLang(s.toString())
                     if (detectedLang != null) {
                         binding?.tvDetectedLang?.text = Constants.map[detectedLang]
