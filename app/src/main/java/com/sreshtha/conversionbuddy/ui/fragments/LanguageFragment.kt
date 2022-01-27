@@ -79,7 +79,7 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeTextToSpeech()
+
         initializeSpeechToText(activity as MainActivity)
         setUpSpinnerAdapter()
         initListeners()
@@ -184,6 +184,7 @@ class LanguageFragment : Fragment() {
 
 
             btnTextToSpeech.setOnClickListener {
+                initializeTextToSpeech()
                 convertTextToSpeech()
             }
 
