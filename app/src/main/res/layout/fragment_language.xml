@@ -124,6 +124,7 @@
                 android:paddingHorizontal="8dp"
                 android:id="@+id/et_input_lang"
                 android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserratregular"
