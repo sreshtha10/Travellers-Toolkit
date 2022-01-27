@@ -8,7 +8,7 @@
         android:topLeftRadius="30dp"
         android:topRightRadius="30dp" />
 
-    <solid android:color="@color/purple_200" />
+    <solid android:color="@color/header" />
 
     <padding
         android:bottom="0dp"

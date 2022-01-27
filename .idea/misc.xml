@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable-anydpi/ic_menu_language.xml" value="0.3485" />
+        <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable-anydpi/ic_mic.xml" value="0.327" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable/language_header.xml" value="0.2074074074074074" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable/language_text_area_background.xml" value="0.29907407407407405" />
         <entry key="..\:/Users/sresh/AndroidStudioProjects/ConversionBuddy/app/src/main/res/drawable/splash_background.xml" value="0.17962962962962964" />

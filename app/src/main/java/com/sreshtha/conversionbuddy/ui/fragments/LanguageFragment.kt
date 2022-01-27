@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Scroller
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -214,6 +215,15 @@ class LanguageFragment : Fragment() {
                 Toast.makeText(activity,"Text copied to clipboard!",Toast.LENGTH_SHORT).show()
             }
 
+            etInputLang.setScroller(Scroller(activity))
+            etInputLang.maxLines = 3
+            etInputLang.isVerticalScrollBarEnabled = true
+            etInputLang.movementMethod = ScrollingMovementMethod()
+
+            etOutputLang.setScroller(Scroller(activity))
+            etOutputLang.isVerticalScrollBarEnabled = true
+            etOutputLang.movementMethod = ScrollingMovementMethod()
+            etOutputLang.maxLines = 3
 
         }
     }
@@ -353,6 +363,7 @@ class LanguageFragment : Fragment() {
         if(isListening){
             speechRecognizer.stopListening()
             isListening = false
+            binding?.etInputLang?.hint = ""
         }
         else{
             isListening = true

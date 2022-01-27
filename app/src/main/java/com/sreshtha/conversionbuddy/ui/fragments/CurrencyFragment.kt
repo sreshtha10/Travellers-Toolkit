@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import com.github.mikephil.charting.charts.BarChart
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.sreshtha.conversionbuddy.R
 import com.sreshtha.conversionbuddy.databinding.FragmentCurrencyBinding
 import com.sreshtha.conversionbuddy.models.CurrencyResponse
@@ -21,6 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 @AndroidEntryPoint
@@ -28,8 +32,7 @@ class CurrencyFragment : Fragment() {
     private var binding: FragmentCurrencyBinding? = null
     private var rates: HashMap<String, Double>? = null
     private lateinit var viewModel: CurrencyViewModel
-    private var barchart:BarChart? = null
-
+    private var isApiCallCompleted:MutableLiveData<Boolean> = MutableLiveData()
 
     private var ipCountry = "AED"
     private var opCountry = "AED"
@@ -42,11 +45,8 @@ class CurrencyFragment : Fragment() {
     ): View? {
         binding = FragmentCurrencyBinding.inflate(inflater, container, false)
         viewModel = (activity as MainActivity).viewModel
-        barchart= binding?.barChart
-
+        isApiCallCompleted.value = false
         apiCall()
-
-
         return binding?.root
     }
 
@@ -54,12 +54,18 @@ class CurrencyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         // setting up spinner's  custom adapter
         setUpCustomSpinnerAdapter()
-        //default selection
-        binding?.spCurrIp?.setSelection(66) //INR
-        binding?.spCurrOp?.setSelection(150) //USD
         initListeners()
+        initValues()
+
+        isApiCallCompleted.observe(viewLifecycleOwner, Observer {
+            if(it){
+                setConversionRates()
+                Log.d("comp",rates.toString())
+            }
+        })
 
     }
 
@@ -98,6 +104,7 @@ class CurrencyFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     rates = response.body()?.rates
                     loadingDialog?.dismissDialog()
+                    isApiCallCompleted.value = true
                     Log.d("Rates", "Success")
 
                 } else {
@@ -128,6 +135,9 @@ class CurrencyFragment : Fragment() {
                     //updating the current ip country
                     ipCountry = currencyCode.uppercase()
                     tvIpCurrCode.text = ipCountry
+                    tvCodeOne.text = ipCountry
+
+                    setConversionRates()
 
                     //changing the flag resource.
                     try {
@@ -172,6 +182,8 @@ class CurrencyFragment : Fragment() {
                     val currencyCode = parent?.getItemAtPosition(position).toString().lowercase()
                     opCountry = currencyCode.uppercase()
                     tvOpCurrCode.text = opCountry
+                    tvCodeNotOne.text = opCountry
+                    setConversionRates()
                     try {
                         if (currencyCode != "try") {
                             val imageRes = resources.getIdentifier(
@@ -222,7 +234,7 @@ class CurrencyFragment : Fragment() {
                             val ipCurr = rates!![ipCountry]
                             val opCurr = rates!![opCountry]
                             val amount = (s.toString().toFloat()) * (opCurr!!) / (ipCurr!!)
-                            tvCurrencyOp.text = amount.toString()
+                            tvCurrencyOp.text = roundOffDecimal(amount).toString()
                         }
                         catch (e:Exception){
                             Log.e("ConversionError",e.message.toString())
@@ -241,6 +253,42 @@ class CurrencyFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun initValues(){
+        //default selection
+        binding?.apply {
+            spCurrIp.setSelection(66) //INR
+            spCurrOp.setSelection(150) //USD
+        }
+    }
+
+
+    private fun setConversionRates(){
+        binding?.apply {
+            val ipCurr = rates?.get(ipCountry)
+            val opCurr = rates?.get(opCountry)
+            Log.d("comp","$ipCurr $opCurr")
+            opCurr?.apply {
+                ipCurr?.apply {
+                    if(ipCurr < opCurr){
+                        tvCurrOne.text = "1"
+                        tvCurrNotOne.text = roundOffDecimal(opCurr/ipCurr).toString()
+                    }
+                    else{
+                        tvCurrNotOne.text = "1"
+                        tvCurrOne.text= roundOffDecimal(ipCurr/opCurr).toString()
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun roundOffDecimal(number: Double): Double {
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
+        return df.format(number).toDouble()
     }
 
 
